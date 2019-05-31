@@ -3,33 +3,19 @@ package com.hglee.gajimarket;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Build.VERSION_CODES;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.MotionEvent;
 import android.widget.Toast;
-
-import com.google.ar.core.Plane;
-import com.google.ar.core.Anchor;
-import com.google.ar.core.HitResult;
-import com.google.ar.sceneform.AnchorNode;
-import com.google.ar.sceneform.rendering.ModelRenderable;
-import com.google.ar.sceneform.ux.ArFragment;
-import com.google.ar.sceneform.ux.TransformableNode;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final double MIN_OPENGL_VERSION = 3.0;
 
     MainFragment mainFragment = new MainFragment();
-    private ArFragment arFragment = new ArFragment();
-    private ModelRenderable andyRenderable;
-
-    private AnchorNode prevAnchorNode;
-    private TransformableNode prevAndy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,49 +26,12 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
         getSupportFragmentManager().beginTransaction().replace(R.id.container, mainFragment).commit();
-
-        // When you build a Renderable, Sceneform loads its resources in the background while returning
-        // a CompletableFuture. Call thenAccept(), handle(), or check isDone() before calling get().
-        ModelRenderable.builder()
-                .setSource(this, R.raw.andy)
-                .build()
-                .thenAccept(renderable -> andyRenderable = renderable)
-                .exceptionally(
-                        throwable -> {
-                            Toast toast =
-                                    Toast.makeText(this, "Unable to load andy renderable", Toast.LENGTH_LONG);
-                            toast.setGravity(Gravity.CENTER, 0, 0);
-                            toast.show();
-                            return null;
-                        });
-
-        arFragment.setOnTapArPlaneListener(
-                (HitResult hitResult, Plane plane, MotionEvent motionEvent) -> {
-                    if (andyRenderable == null) {
-                        return;
-                    }
-
-                    // Remove the previous Anchor.
-                    if(prevAnchorNode != null && prevAndy != null) {
-                        prevAnchorNode.removeChild(prevAndy);
-                        arFragment.getArSceneView().getScene().removeChild(prevAnchorNode);
-                    }
-
-                    // Create the Anchor.
-                    Anchor anchor = hitResult.createAnchor();
-                    AnchorNode anchorNode = new AnchorNode(anchor);
-                    prevAnchorNode = anchorNode;
-                    anchorNode.setParent(arFragment.getArSceneView().getScene());
-
-                    // Create the transformable andy and add it to the anchor.
-                    TransformableNode andy = new TransformableNode(arFragment.getTransformationSystem());
-                    prevAndy = andy;
-                    andy.setParent(anchorNode);
-                    andy.setRenderable(andyRenderable);
-                    andy.select();
-                });
-
         Log.d("CREATION", "MainActivity::onCreate()");
+    }
+
+    public void onArActivityStart() {
+        Intent intent = new Intent(getApplicationContext(), ArActivity.class);
+        startActivity(intent);
     }
 
     public void onFragmentChange(int index) {
@@ -91,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
                 getSupportFragmentManager().beginTransaction().replace(R.id.container, mainFragment).commit();
                 break;
             case 1:
-                getSupportFragmentManager().beginTransaction().replace(R.id.container, arFragment).commit();
+                //getSupportFragmentManager().beginTransaction().replace(R.id.container, arFragment).commit();
                 break;
         }
     }
