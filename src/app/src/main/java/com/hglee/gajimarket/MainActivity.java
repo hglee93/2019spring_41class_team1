@@ -20,9 +20,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (!checkIsSupportedDeviceOrFinish(this)) {
+        /*if (!checkIsSupportedDeviceOrFinish(this)) {
             return;
-        }
+        }*/
 
         setContentView(R.layout.activity_main);
         getSupportFragmentManager().beginTransaction().replace(R.id.container, mainFragment).commit();
