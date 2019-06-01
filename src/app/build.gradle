@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.ar.sceneform.plugin'
 
 android {
     compileSdkVersion 28
@@ -40,3 +41,13 @@ dependencies {
     // Alternatively, use ArSceneView without the UX dependency.
     implementation 'com.google.ar.sceneform:core:1.9.0'
 }
+
+sceneform.asset('sampledata/sofa/aaa.fbx',
+        'default',
+        'sampledata/sofa/aaa.sfa',
+        'src/main/res/raw/aaa')
+
+sceneform.asset('sampledata/gaming-chair/model.obj',
+        'default',
+        'sampledata/gaming-chair/model.sfa',
+        'src/main/res/raw/model')

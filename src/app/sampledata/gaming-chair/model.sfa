@@ -1,0 +1,49 @@
+{
+  materials: [
+    {
+      name: 'material0',
+      parameters: [
+        {
+          baseColor: 'Model',
+        },
+        {
+          baseColorTint: [
+            1,
+            1,
+            1,
+            1,
+          ],
+        },
+        {
+          metallic: 0,
+        },
+        {
+          roughness: 1,
+        },
+        {
+          opacity: null,
+        },
+      ],
+      source: 'build/sceneform_sdk/default_materials/obj_material.sfm',
+    },
+  ],
+  model: {
+    attributes: [
+      'Position',
+      'TexCoord',
+      'Orientation',
+    ],
+    collision: {},
+    file: 'sampledata/gaming-chair/model.obj',
+    name: 'model',
+    recenter: 'root',
+  },
+  samplers: [
+    {
+      file: 'sampledata/gaming-chair\\Model.jpg',
+      name: 'Model',
+      pipeline_name: 'Model.jpg',
+    },
+  ],
+  version: '0.54:2',
+}
