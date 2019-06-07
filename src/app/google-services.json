@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1089722696769",
+    "firebase_url": "https://eggplant-market.firebaseio.com",
+    "project_id": "eggplant-market",
+    "storage_bucket": "eggplant-market.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1089722696769:android:397169db293bb9c8",
+        "android_client_info": {
+          "package_name": "com.team.gajimarket"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1089722696769-h9ljs2o3cfa8mb1g6johs5e9ru8mbjbm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.team.gajimarket",
+            "certificate_hash": "4e75720e0aa13de7353f5e6e8d2d15053cdb5d76"
+          }
+        },
+        {
+          "client_id": "1089722696769-fh1qt67e906fm129clq41c8au03pmsr1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDiFsmbm2iqAeJstFg9Bth2mwwCcs0d2EM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1089722696769-fh1qt67e906fm129clq41c8au03pmsr1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
