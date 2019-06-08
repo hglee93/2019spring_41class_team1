@@ -19,7 +19,14 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.team.gajimarket.R;
 
 public class SigninActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
@@ -29,6 +36,7 @@ public class SigninActivity extends AppCompatActivity implements GoogleApiClient
     private static final int RC_SIGN_IN = 1000;
     private FirebaseAuth mAuth;
     private GoogleApiClient mGoogleApiClient;
+    private DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +56,7 @@ public class SigninActivity extends AppCompatActivity implements GoogleApiClient
                 .build();
 
         mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         Google_Login = findViewById(R.id.Google_Login);
         Google_Login.setOnClickListener(new View.OnClickListener() {
@@ -83,7 +92,37 @@ public class SigninActivity extends AppCompatActivity implements GoogleApiClient
                         if(!task.isSuccessful()){
                             Toast.makeText(SigninActivity.this, "인증 실패", Toast.LENGTH_SHORT).show();
                         }else{
-                            Toast.makeText(SigninActivity.this, "구글 로그인 인증 성공", Toast.LENGTH_SHORT).show();
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            String uid = mAuth.getUid();
+                            String name = user.getDisplayName();
+                            String email = user.getEmail();
+
+                            Query query = mDatabase.child("users").orderByChild("userName");
+                            query.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    boolean flag = false;
+                                    for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+                                        if (postSnapshot.getValue(UserData.class).getUserEmail().equals(email)) {
+                                            flag = true;
+                                            break;
+                                        }
+                                    }
+
+                                    if (!flag) {
+                                        UserData userdata = new UserData(name, email, "users", "");
+                                        mDatabase.child("users").child(uid).setValue(userdata);
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            });
+
+                            Toast.makeText(SigninActivity.this, name + "님, 안녕하세요.", Toast.LENGTH_SHORT).show();
+
                             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                             startActivity(intent);
                         }
