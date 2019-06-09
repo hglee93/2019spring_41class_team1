@@ -84,7 +84,7 @@
                 android:textSize="30dp" />
             <EditText
                 android:id="@+id/edtWidth"
-                android:layout_width="50dp"
+                android:layout_width="70dp"
                 android:layout_height="wrap_content"
                 android:inputType="number"
                 android:textSize="30dp"/>
@@ -95,7 +95,7 @@
                 android:textSize="30dp" />
             <EditText
                 android:id="@+id/edtDepth"
-                android:layout_width="50dp"
+                android:layout_width="70dp"
                 android:layout_height="wrap_content"
                 android:inputType="number"
                 android:textSize="30dp"/>
@@ -106,7 +106,7 @@
                 android:textSize="30dp" />
             <EditText
                 android:id="@+id/edtHeight"
-                android:layout_width="50dp"
+                android:layout_width="70dp"
                 android:layout_height="wrap_content"
                 android:inputType="number"
                 android:textSize="30dp"/>

@@ -5,9 +5,7 @@ public class RecyclerItem {
     String price;
     String size;
 
-    public RecyclerItem(String name) {
-        this.name = name;
-    }
+    public RecyclerItem() { }
 
     public RecyclerItem(String name, String price, String size) {
         this.name = name;
@@ -23,9 +21,7 @@ public class RecyclerItem {
         return price;
     }
 
-    public String getSize() {
-        return size;
-    }
+    public String getSize() { return size; }
 
     public void setName(String name) {
         this.name = name;
@@ -35,7 +31,5 @@ public class RecyclerItem {
         this.price = price;
     }
 
-    public void setSize(String size) {
-        this.size = size;
-    }
+    public void setSize(String size) { this.size = size; }
 }

@@ -10,21 +10,36 @@ import android.media.Image;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 import com.team.gajimarket.R;
+import com.team.gajimarket.item.FurnitureData;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -37,9 +52,14 @@ public class FurnitureAdminActivity extends AppCompatActivity implements View.On
 
     private Uri photoURI;
     private File photoFile;
+    private DecimalFormat decimalFormat = new DecimalFormat("#,###");
+    private String resPrice = "", resWidth = "", resDepth = "", resHeight = "";
     ImageView imgCamera, imgGallery, imgConfirm;
     EditText edtName, edtPrice, edtWidth, edtDepth, edtHeight;
     ImageView photozone;
+
+    private FirebaseAuth mAuth;
+    private DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +68,9 @@ public class FurnitureAdminActivity extends AppCompatActivity implements View.On
 
         tedPermission();
 
+        mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+
         imgCamera = (ImageView)findViewById(R.id.imgCamera);
         imgGallery = (ImageView)findViewById(R.id.imgGallery);
         imgConfirm = (ImageView)findViewById(R.id.imgConfirm);
@@ -55,9 +78,13 @@ public class FurnitureAdminActivity extends AppCompatActivity implements View.On
 
         edtName = (EditText)findViewById(R.id.edtName);
         edtPrice = (EditText)findViewById(R.id.edtPrice);
+        edtPrice.addTextChangedListener(watcherPrice);
         edtWidth = (EditText)findViewById(R.id.edtWidth);
+        edtWidth.addTextChangedListener(watcherWidth);
         edtDepth = (EditText)findViewById(R.id.edtDepth);
+        edtDepth.addTextChangedListener(watcherDepth);
         edtHeight = (EditText)findViewById(R.id.edtHeight);
+        edtHeight.addTextChangedListener(watcherHeight);
 
         imgCamera.setOnClickListener(this);
         imgGallery.setOnClickListener(this);
@@ -84,6 +111,87 @@ public class FurnitureAdminActivity extends AppCompatActivity implements View.On
                 .setPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
                 .check();
     }
+
+    TextWatcher watcherPrice = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            if (!TextUtils.isEmpty(s.toString()) && !s.toString().equals(resPrice)) {
+                resPrice = decimalFormat.format(Double.parseDouble(s.toString().replaceAll(",","")));
+                edtPrice.setText(resPrice);
+                edtPrice.setSelection(resPrice.length());
+            }
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+
+        }
+    };
+    TextWatcher watcherWidth = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            if (!TextUtils.isEmpty(s.toString()) && !s.toString().equals(resWidth)) {
+                resWidth = decimalFormat.format(Double.parseDouble(s.toString().replaceAll(",","")));
+                edtWidth.setText(resWidth);
+                edtWidth.setSelection(resWidth.length());
+            }
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+
+        }
+    };
+    TextWatcher watcherDepth = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            if (!TextUtils.isEmpty(s.toString()) && !s.toString().equals(resDepth)) {
+                resDepth = decimalFormat.format(Double.parseDouble(s.toString().replaceAll(",", "")));
+                edtDepth.setText(resDepth);
+                edtDepth.setSelection(resDepth.length());
+            }
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+
+        }
+    };
+    TextWatcher watcherHeight = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            if (!TextUtils.isEmpty(s.toString()) && !s.toString().equals(resHeight)) {
+                resHeight = decimalFormat.format(Double.parseDouble(s.toString().replaceAll(",","")));
+                edtHeight.setText(resHeight);
+                edtHeight.setSelection(resHeight.length());
+            }
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+
+        }
+    };
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -178,6 +286,32 @@ public class FurnitureAdminActivity extends AppCompatActivity implements View.On
             } else if (photozone.getDrawable() == null) {
                 Toast.makeText(this, "가구 사진을 등록해주세요.", Toast.LENGTH_SHORT).show();
             } else {
+                FirebaseUser user = mAuth.getCurrentUser();
+                String uid = mAuth.getUid();
+                String name = user.getDisplayName();
+                String email = user.getEmail();
+
+                Query query = mDatabase.child("furnitures").orderByChild("sellerName");
+                query.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        int i = 0;
+                        for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+                            i++;
+                        }
+
+                        FurnitureData furnituredata = new FurnitureData(name, email, edtName.getText().toString(),
+                                edtPrice.getText().toString(), edtWidth.getText().toString(), edtDepth.getText().toString(),
+                                edtHeight.getText().toString());
+                        mDatabase.child("furnitures").child(uid).child(String.valueOf(i)).setValue(furnituredata);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
                 finish();
                 Toast.makeText(this, "등록 요청 되었습니다.", Toast.LENGTH_SHORT).show();
             }
