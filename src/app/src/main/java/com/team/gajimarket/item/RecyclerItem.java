@@ -1,16 +1,20 @@
 package com.team.gajimarket.item;
 
+import android.graphics.Bitmap;
+
 public class RecyclerItem {
-    String name;
-    String price;
-    String size;
+    public String name;
+    public String price;
+    public String size;
+    public Bitmap drawableID;
 
     public RecyclerItem() { }
 
-    public RecyclerItem(String name, String price, String size) {
+    public RecyclerItem(String name, String price, String size, Bitmap drawableID) {
         this.name = name;
         this.price = price;
         this.size = size;
+        this.drawableID = drawableID;
     }
 
     public String getName() {
@@ -32,4 +36,6 @@ public class RecyclerItem {
     }
 
     public void setSize(String size) { this.size = size; }
+
+    public void setPic(Bitmap bitmap) { this.drawableID = bitmap; }
 }

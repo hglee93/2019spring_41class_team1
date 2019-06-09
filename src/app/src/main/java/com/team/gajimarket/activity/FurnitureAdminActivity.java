@@ -2,6 +2,7 @@ package com.team.gajimarket.activity;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -23,6 +24,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -32,6 +35,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 import com.team.gajimarket.R;
@@ -50,6 +57,8 @@ public class FurnitureAdminActivity extends AppCompatActivity implements View.On
     private static final int PICK_FROM_ALBUM = 2;
     String currentPhotoPath;
 
+    int i;
+
     private Uri photoURI;
     private File photoFile;
     private DecimalFormat decimalFormat = new DecimalFormat("#,###");
@@ -67,6 +76,8 @@ public class FurnitureAdminActivity extends AppCompatActivity implements View.On
         setContentView(R.layout.activity_furniture_admin);
 
         tedPermission();
+
+        i = 0;
 
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -273,6 +284,49 @@ public class FurnitureAdminActivity extends AppCompatActivity implements View.On
         startActivityForResult(intent, PICK_FROM_ALBUM);
     }
 
+    private void uploadFile() {
+        if (photoURI != null) {
+            final ProgressDialog progressDialog = new ProgressDialog(this);
+            progressDialog.setTitle("등록 요청 중...");
+            progressDialog.show();
+
+            FirebaseUser user = mAuth.getCurrentUser();
+            String uid = mAuth.getUid();
+
+            FirebaseStorage storage = FirebaseStorage.getInstance();
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMHH_mmss");
+            Date now = new Date();
+            String filename = uid + "_" + formatter.format(now) + ".png";
+            StorageReference storageReference = storage.getReferenceFromUrl("gs://eggplant-market.appspot.com")
+                    .child("/furnitures/" + filename);
+            storageReference.putFile(photoURI)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            progressDialog.dismiss();
+                            Toast.makeText(getApplicationContext(), "등록 요청되었습니다", Toast.LENGTH_SHORT).show();
+                            finish();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            progressDialog.dismiss();
+                            Toast.makeText(getApplicationContext(), "등록에 실패했습니다.", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                            double progress = (100 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                            progressDialog.setMessage("Uploaded " + ((int) progress) + "% ...");
+                        }
+                    });
+        } else {
+            Toast.makeText(getApplicationContext(), "등록된 사진 파일이 없습니다. 다시 한 번 확인해주세요.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     @Override
     public void onClick(View view) {
         if (view == imgCamera) {
@@ -291,19 +345,21 @@ public class FurnitureAdminActivity extends AppCompatActivity implements View.On
                 String name = user.getDisplayName();
                 String email = user.getEmail();
 
+                // Firebase Realtime DB에 Furniture 데이터 저장
                 Query query = mDatabase.child("furnitures").orderByChild("sellerName");
                 query.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        int i = 0;
-                        for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
-                            i++;
-                        }
+                        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMHH_mmss");
+                        Date now = new Date();
+                        String fileName = uid + "_" + formatter.format(now);
 
-                        FurnitureData furnituredata = new FurnitureData(name, email, edtName.getText().toString(),
+                        FurnitureData furnituredata = new FurnitureData(uid, name, email, edtName.getText().toString(),
                                 edtPrice.getText().toString(), edtWidth.getText().toString(), edtDepth.getText().toString(),
                                 edtHeight.getText().toString());
-                        mDatabase.child("furnitures").child(uid).child(String.valueOf(i)).setValue(furnituredata);
+                        mDatabase.child("furnitures").child(fileName).setValue(furnituredata);
+
+                        uploadFile();
                     }
 
                     @Override
@@ -311,9 +367,6 @@ public class FurnitureAdminActivity extends AppCompatActivity implements View.On
 
                     }
                 });
-
-                finish();
-                Toast.makeText(this, "등록 요청 되었습니다.", Toast.LENGTH_SHORT).show();
             }
         }
     }

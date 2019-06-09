@@ -1,5 +1,6 @@
 package com.team.gajimarket.activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -37,6 +38,7 @@ public class SigninActivity extends AppCompatActivity implements GoogleApiClient
     private FirebaseAuth mAuth;
     private GoogleApiClient mGoogleApiClient;
     private DatabaseReference mDatabase;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +66,11 @@ public class SigninActivity extends AppCompatActivity implements GoogleApiClient
             public void onClick(View view) {
                 Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
                 startActivityForResult(signInIntent,RC_SIGN_IN);
+
+                progressDialog = new ProgressDialog(SigninActivity.this);
+                progressDialog.setTitle("Loading...");
+                progressDialog.setMessage("로그인 중입니다.\n잠시만 기다려주세요.");
+                progressDialog.show();
             }
         });
     }
@@ -79,6 +86,8 @@ public class SigninActivity extends AppCompatActivity implements GoogleApiClient
                 firebaseAuthWithGoogle(account);
             }
             else{
+                progressDialog.dismiss();
+                Toast.makeText(this, "로그인에 실패했습니다.", Toast.LENGTH_SHORT).show();
                 //구글 로그인 실패
             }
         }
@@ -121,6 +130,7 @@ public class SigninActivity extends AppCompatActivity implements GoogleApiClient
                                 }
                             });
 
+                            progressDialog.dismiss();
                             Toast.makeText(SigninActivity.this, name + "님, 안녕하세요.", Toast.LENGTH_SHORT).show();
 
                             Intent intent = new Intent(getApplicationContext(), MainActivity.class);

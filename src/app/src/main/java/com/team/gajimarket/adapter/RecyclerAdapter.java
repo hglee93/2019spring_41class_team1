@@ -4,9 +4,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.firebase.storage.StorageReference;
 import com.team.gajimarket.R;
 
 import java.util.ArrayList;
@@ -58,6 +60,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ItemVi
         private TextView tvName;
         private TextView tvPrice;
         private TextView tvSize;
+        private ImageView ivPic;
         private RelativeLayout layoutItem;
 
         public ItemViewHolder(View itemView) {
@@ -65,12 +68,14 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ItemVi
             tvName = (TextView) itemView.findViewById(R.id.tvItemName);
             tvPrice = (TextView) itemView.findViewById(R.id.tvItemPrice);
             tvSize = (TextView) itemView.findViewById(R.id.tvItemSize);
+            ivPic = (ImageView) itemView.findViewById(R.id.itemImg);
             layoutItem = (RelativeLayout) itemView.findViewById(R.id.itemView);
         }
         public void bind(final RecyclerItem item, final OnItemClickListener listener) {
             tvName.setText(item.getName());
             tvPrice.setText(item.getPrice());
             tvSize.setText(item.getSize());
+            ivPic.setImageBitmap(item.drawableID);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
