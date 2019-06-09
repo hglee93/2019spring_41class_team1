@@ -3,6 +3,7 @@ package com.team.gajimarket.fragment;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -23,6 +24,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.team.gajimarket.R;
+import com.team.gajimarket.activity.FurnitureAdminActivity;
 import com.team.gajimarket.activity.MainActivity;
 import com.team.gajimarket.activity.UserData;
 
@@ -55,6 +57,7 @@ public class FragmentMypage extends Fragment {
         String email = user.getEmail();
 
         Button changeToSeller = (Button)rootView.findViewById(R.id.btnChangeToSeller);
+        Button adminFurniture = (Button)rootView.findViewById(R.id.btnAdminFurniture);
 
         Query query = mDatabase.child("users").orderByChild("userName");
         query.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -64,8 +67,10 @@ public class FragmentMypage extends Fragment {
                     if (postSnapshot.getKey().equals(mAuth.getUid())) {
                         if (postSnapshot.getValue(UserData.class).getUserPos().equals("seller")) {
                             changeToSeller.setVisibility(changeToSeller.GONE);
+                            adminFurniture.setVisibility(adminFurniture.VISIBLE);
                         } else {
                             changeToSeller.setVisibility(changeToSeller.VISIBLE);
+                            adminFurniture.setVisibility(adminFurniture.GONE);
                         }
                     }
                 }
@@ -102,6 +107,7 @@ public class FragmentMypage extends Fragment {
                         mDatabase.updateChildren(childUpdates);
 
                         changeToSeller.setVisibility(changeToSeller.GONE);
+                        adminFurniture.setVisibility(adminFurniture.VISIBLE);
                     }
                 });
                 alert.setNegativeButton("취소", new DialogInterface.OnClickListener() {
@@ -112,6 +118,14 @@ public class FragmentMypage extends Fragment {
                 });
 
                 alert.show();
+            }
+        });
+
+        adminFurniture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mainActivity.getApplicationContext(), FurnitureAdminActivity.class);
+                startActivity(intent);
             }
         });
 

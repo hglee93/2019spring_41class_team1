@@ -3,12 +3,16 @@
     package="com.team.gajimarket">
     <!-- Both "AR Optional" and "AR Required" apps require CAMERA permission. -->
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <!--
  Indicates that app requires ARCore ("AR Required"). Ensures app is only
          visible in the Google Play Store on devices that support ARCore.
          For "AR Optional" apps remove this line.
     -->
     <uses-feature android:name="android.hardware.camera.ar" />
+    <uses-feature android:name="android.hardware.camera"
+        android:required="true"/>
 
     <application
         android:allowBackup="true"
@@ -17,7 +21,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.DetailActivity"></activity>
+        <activity android:name=".activity.FurnitureAdminActivity"></activity>
+        <activity android:name=".activity.DetailActivity" />
         <activity android:name=".activity.SplashActivity" />
         <activity android:name=".activity.SigninActivity">
             <intent-filter>
@@ -27,11 +32,21 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.ArActivity" />
-        <activity android:name=".activity.MainActivity"></activity>
+        <activity android:name=".activity.MainActivity" />
 
         <meta-data
             android:name="com.google.ar.core"
             android:value="optional" />
+
+        <provider
+            android:authorities="com.team.gajimarket"
+            android:name="android.support.v4.content.FileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true" >
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
     </application>
 
 </manifest>
