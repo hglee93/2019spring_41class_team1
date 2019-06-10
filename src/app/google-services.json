@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "1089722696769-pt88ndhb4lmrt2hdq69c576jevjpe0b9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.team.gajimarket",
+            "certificate_hash": "999a41124291e5f655c4899b70a0b71bfb71953f"
+          }
+        },
+        {
           "client_id": "1089722696769-h9ljs2o3cfa8mb1g6johs5e9ru8mbjbm.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

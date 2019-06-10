@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -56,6 +57,16 @@ public class FragmentMypage extends Fragment {
         String name = user.getDisplayName();
         String email = user.getEmail();
 
+        TextView emailView = (TextView)rootView.findViewById(R.id.tvEmailView);
+        TextView nameView = (TextView)rootView.findViewById(R.id.tvNameView);
+        TextView addrView = (TextView)rootView.findViewById(R.id.tvAddressView);
+
+        emailView.setText(email);
+        nameView.setText(name);
+        addrView.setText("");
+
+        Button changeName = (Button)rootView.findViewById(R.id.btnChangeName);
+        Button changeAddr = (Button)rootView.findViewById(R.id.btnChangeAddr);
         Button changeToSeller = (Button)rootView.findViewById(R.id.btnChangeToSeller);
         Button adminFurniture = (Button)rootView.findViewById(R.id.btnAdminFurniture);
 
@@ -81,6 +92,63 @@ public class FragmentMypage extends Fragment {
 
             }
         });
+
+        changeName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder alert = new AlertDialog.Builder(mainActivity);
+
+                alert.setTitle("이름 변경");
+                alert.setMessage("변경할 이름을 입력하세요.");
+
+                final EditText CRN = new EditText(mainActivity);
+                alert.setView(CRN);
+
+                alert.setPositiveButton("변경", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(mainActivity, "변경 되었습니다.", Toast.LENGTH_SHORT).show();
+                        String userCRN = CRN.getText().toString();
+                    }
+                });
+                alert.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+                alert.show();
+            }
+        });
+
+        changeAddr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder alert = new AlertDialog.Builder(mainActivity);
+
+                alert.setTitle("주소 변경");
+                alert.setMessage("변경할 주소를 입력하세요.");
+
+                final EditText CRN = new EditText(mainActivity);
+                alert.setView(CRN);
+
+                alert.setPositiveButton("변경", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(mainActivity, "변경 되었습니다.", Toast.LENGTH_SHORT).show();
+                        String userCRN = CRN.getText().toString();
+                    }
+                });
+                alert.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+                alert.show();
+            }
+        });
+
 
         changeToSeller.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,7 +196,6 @@ public class FragmentMypage extends Fragment {
                 startActivity(intent);
             }
         });
-
         return rootView;
     }
 
