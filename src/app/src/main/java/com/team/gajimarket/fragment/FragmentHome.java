@@ -2,29 +2,20 @@ package com.team.gajimarket.fragment;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Layout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.Registry;
-import com.bumptech.glide.annotation.GlideModule;
-import com.bumptech.glide.module.AppGlideModule;
-import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -38,14 +29,12 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.team.gajimarket.R;
+import com.team.gajimarket.activity.DetailActivity;
 import com.team.gajimarket.activity.MainActivity;
-import com.team.gajimarket.activity.SigninActivity;
 import com.team.gajimarket.adapter.RecyclerAdapter;
 import com.team.gajimarket.item.FurnitureData;
 import com.team.gajimarket.item.RecyclerItem;
 
-import java.io.InputStream;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class FragmentHome extends Fragment {
@@ -58,6 +47,7 @@ public class FragmentHome extends Fragment {
     private DatabaseReference mDatabase;
 
     private int count;
+    private String fullURL;
 
     @Override
     public void onAttach(Context context) {
@@ -112,14 +102,15 @@ public class FragmentHome extends Fragment {
                     String height = postSnapshot.getValue(FurnitureData.class).getHeight();
                     String size = width + " X " + depth + " X " + height;
 
-                    StorageReference storageReference = storage.getReferenceFromUrl("gs://eggplant-market.appspot.com")
+                    fullURL = "gs://eggplant-market.appspot.com";
+                    StorageReference storageReference = storage.getReferenceFromUrl(fullURL)
                             .child("furnitures/" + key + ".png");
 
                     storageReference.getBytes(1024 * 1024 * 5)
                             .addOnSuccessListener(new OnSuccessListener<byte[]>() {
                                 @Override
                                 public void onSuccess(byte[] bytes) {
-                                    Dataset.add(new RecyclerItem(name, price, size, BitmapFactory.decodeByteArray(bytes, 0, bytes.length)));
+                                    Dataset.add(new RecyclerItem(key, name, price, size, BitmapFactory.decodeByteArray(bytes, 0, bytes.length)));
                                     mAdapter.notifyDataSetChanged();
                                     if (count == mAdapter.getItemCount()) {
                                         progressDialog.dismiss();
@@ -148,7 +139,10 @@ public class FragmentHome extends Fragment {
         mAdapter = new RecyclerAdapter(Dataset, new RecyclerAdapter.OnItemClickListener(){
             @Override
             public void onItemClick(RecyclerItem item) {
-                Toast.makeText(mainActivity, "Item Clicked", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(mainActivity, DetailActivity.class);
+                intent.putExtra("pickedItem", item);
+                intent.putExtra("fullURL", fullURL);
+                startActivity(intent);
             }
         });
 

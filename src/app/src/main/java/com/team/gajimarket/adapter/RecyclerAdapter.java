@@ -1,5 +1,7 @@
 package com.team.gajimarket.adapter;
 
+import android.content.Context;
+import android.support.v7.view.menu.MenuView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,11 +9,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.storage.StorageReference;
 import com.team.gajimarket.R;
 
 import java.util.ArrayList;
+
+import com.team.gajimarket.activity.MainActivity;
 import com.team.gajimarket.item.*;
 
 /**
@@ -27,6 +32,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ItemVi
     private final ArrayList<RecyclerItem> mItems;
     private final OnItemClickListener listener;
 
+    private int position = 0;
+
     public RecyclerAdapter(ArrayList<RecyclerItem> items, OnItemClickListener listener){
         this.mItems = items;
         this.listener = listener;
@@ -36,7 +43,26 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ItemVi
     @Override
     public ItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recycler_view,parent,false);
-        return new ItemViewHolder(view);
+
+        final ItemViewHolder holder = new ItemViewHolder(view);
+        /*
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                position = holder.getAdapterPosition();
+            }
+        });
+
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                position = holder.getAdapterPosition();
+
+                return true;
+            }
+        });
+        */
+        return holder;
     }
 
     // View 의 내용을 해당 포지션의 데이터로 바꿉니다.
