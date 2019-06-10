@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
         homeFragment = new FragmentHome();
         cateFragment = new FragmentCate();
         mypageFragment = new FragmentMypage();
+
         getSupportFragmentManager().beginTransaction().replace(R.id.container, homeFragment).commit();
 
         TabLayout tabs = (TabLayout) findViewById(R.id.tabs);
@@ -54,9 +55,6 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case 2:
                         selected = mypageFragment;
-                        break;
-                    case 3:
-                        selected = mainFragment;
                         break;
                 }
                 getSupportFragmentManager().beginTransaction().replace(R.id.container, selected).commit();

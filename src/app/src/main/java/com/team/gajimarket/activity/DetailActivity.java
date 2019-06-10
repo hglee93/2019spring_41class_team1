@@ -6,6 +6,8 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -28,7 +30,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 
 public class DetailActivity extends AppCompatActivity {
-
     ImageView imgItem;
     TextView txtName, txtPrice, txtSize;
 
@@ -58,5 +59,14 @@ public class DetailActivity extends AppCompatActivity {
         txtPrice.setText(pickedItem.getPrice());
         txtSize.setText(pickedItem.getSize());
         Glide.with(this).load(storageReference).into(imgItem);
+
+        Button btnPickedItemVR = (Button)findViewById(R.id.btnPickedItemVR);
+        btnPickedItemVR.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), ArActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 }
