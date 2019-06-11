@@ -56,7 +56,7 @@ public class DetailActivity extends AppCompatActivity {
         txtSize = (TextView)findViewById(R.id.pickedItemSize);
 
         txtName.setText(pickedItem.getName());
-        txtPrice.setText(pickedItem.getPrice());
+        txtPrice.setText(pickedItem.getPrice() + " KRW");
         txtSize.setText(pickedItem.getSize());
         Glide.with(this).load(storageReference).into(imgItem);
 

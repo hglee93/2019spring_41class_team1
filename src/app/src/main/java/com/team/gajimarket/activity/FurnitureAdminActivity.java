@@ -220,7 +220,10 @@ public class FurnitureAdminActivity extends AppCompatActivity implements View.On
         if (requestCode == REQUEST_IMAGE_CAPTURE) {
             ((ImageView)findViewById(R.id.photozone)).setImageURI(photoURI);
         } else if (requestCode == PICK_FROM_ALBUM) {
-            photoURI = data.getData();
+            /*photoURI = data.getData();
+            if(photoURI == null) {
+                return;
+            }
             Cursor cursor = null;
             try {
                 String[] proj = {MediaStore.Images.Media.DATA };
@@ -235,7 +238,7 @@ public class FurnitureAdminActivity extends AppCompatActivity implements View.On
                     cursor.close();
                 }
             }
-            setImage();
+            setImage();*/
         }
     }
 
@@ -279,9 +282,13 @@ public class FurnitureAdminActivity extends AppCompatActivity implements View.On
     }
 
     private void goToAlbum() {
-        Intent intent = new Intent(Intent.ACTION_PICK);
+        /*Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
-        startActivityForResult(intent, PICK_FROM_ALBUM);
+        startActivityForResult(intent, PICK_FROM_ALBUM);*/
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent, 1);
     }
 
     private void uploadFile() {
