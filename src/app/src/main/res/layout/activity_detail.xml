@@ -9,37 +9,56 @@
 
     <ImageView
         android:id="@+id/pickedItemImage"
+        android:layout_marginTop="24dp"
         android:layout_width="match_parent"
-        android:layout_height="200dp" />
+        android:layout_height="200dp"
+        android:layout_marginBottom="24dp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_margin="10dp">
+
+        <TextView
+            android:id="@+id/pickedItemInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@android:color/black"
+            android:textStyle="bold"
+            android:textSize="20dp"
+            android:text="Product Information" />
+        <View style="@style/Divider" />
         <TextView
             android:id="@+id/pickedItemName"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:textStyle="bold"
-            android:textSize="30dp"
-            android:text="FURNITURE_NAME" />
+            android:textSize="20dp"
+            android:text="FURNITURE_NAME"
+            android:layout_marginTop="10dp"/>
         <TextView
             android:id="@+id/pickedItemPrice"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:textStyle="bold"
-            android:textSize="30dp"
+            android:textSize="20dp"
             android:text="FURNITURE_PRICE"
             android:layout_marginTop="10dp"/>
         <TextView
             android:id="@+id/pickedItemSize"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:textStyle="bold"
-            android:textSize="30dp"
+            android:textSize="20dp"
             android:text="SIZE"
-            android:layout_marginTop="10dp"/>
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"/>
+        <View style="@style/Divider" />
     </LinearLayout>
 
     <Button

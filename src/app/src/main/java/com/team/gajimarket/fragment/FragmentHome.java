@@ -100,7 +100,7 @@ public class FragmentHome extends Fragment {
                     String width = postSnapshot.getValue(FurnitureData.class).getWidth();
                     String depth = postSnapshot.getValue(FurnitureData.class).getDepth();
                     String height = postSnapshot.getValue(FurnitureData.class).getHeight();
-                    String size = width + " X " + depth + " X " + height;
+                    String size = width + " x " + depth + " x " + height;
 
                     fullURL = "gs://eggplant-market.appspot.com";
                     StorageReference storageReference = storage.getReferenceFromUrl(fullURL)

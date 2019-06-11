@@ -48,7 +48,7 @@
                 android:layout_gravity="center"
                 android:gravity="center_horizontal"
                 android:layout_weight="2"
-                android:text="jeuslhg@gmail.com"
+                android:text="E-Mail"
                 android:textSize="20dp" />
 
         </LinearLayout>
@@ -78,7 +78,7 @@
                 android:layout_gravity="center"
                 android:gravity="center_horizontal"
                 android:layout_weight="2"
-                android:text="이희관"
+                android:text="NAME"
                 android:textSize="20dp" />
 
         </LinearLayout>

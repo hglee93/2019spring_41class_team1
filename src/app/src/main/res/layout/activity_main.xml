@@ -15,7 +15,7 @@
     <android.support.design.widget.TabLayout
         android:id="@+id/tabs"
         android:layout_width="match_parent"
-        android:layout_height="84dp"
+        android:layout_height="72dp"
         android:background="@android:color/holo_purple"
         android:elevation="1dp"
         app:layout_anchor="@+id/container"
