@@ -78,18 +78,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), ArActivity.class);
         startActivity(intent);
     }
-
-    public void onFragmentChange(int index) {
-        switch (index) {
-            case 0:
-                getSupportFragmentManager().beginTransaction().replace(R.id.container, mainFragment).commit();
-                break;
-            case 1:
-                //getSupportFragmentManager().beginTransaction().replace(R.id.container, arFragment).commit();
-                break;
-        }
-    }
-
+    
     public static boolean checkIsSupportedDeviceOrFinish(final Activity activity) {
         if (Build.VERSION.SDK_INT < VERSION_CODES.N) {
             Log.e(TAG, "Sceneform requires Android N or later");

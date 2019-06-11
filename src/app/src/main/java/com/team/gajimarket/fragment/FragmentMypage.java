@@ -65,7 +65,16 @@ public class FragmentMypage extends Fragment {
         nameView.setText(name);
         addrView.setText("");
 
-        Button changeName = (Button)rootView.findViewById(R.id.btnChangeName);
+        mDatabase.child("users").child(user.getUid()).child("userAddr").addValueEventListener(new ValueEventListener(){
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String value = dataSnapshot.getValue(String.class);
+                addrView.setText(value);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {}
+        });
+
         Button changeAddr = (Button)rootView.findViewById(R.id.btnChangeAddr);
         Button changeToSeller = (Button)rootView.findViewById(R.id.btnChangeToSeller);
         Button adminFurniture = (Button)rootView.findViewById(R.id.btnAdminFurniture);
@@ -93,34 +102,6 @@ public class FragmentMypage extends Fragment {
             }
         });
 
-        changeName.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AlertDialog.Builder alert = new AlertDialog.Builder(mainActivity);
-
-                alert.setTitle("이름 변경");
-                alert.setMessage("변경할 이름을 입력하세요.");
-
-                final EditText CRN = new EditText(mainActivity);
-                alert.setView(CRN);
-
-                alert.setPositiveButton("변경", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(mainActivity, "변경 되었습니다.", Toast.LENGTH_SHORT).show();
-                        String userCRN = CRN.getText().toString();
-                    }
-                });
-                alert.setNegativeButton("취소", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                });
-                alert.show();
-            }
-        });
-
         changeAddr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -129,14 +110,15 @@ public class FragmentMypage extends Fragment {
                 alert.setTitle("주소 변경");
                 alert.setMessage("변경할 주소를 입력하세요.");
 
-                final EditText CRN = new EditText(mainActivity);
-                alert.setView(CRN);
+                final EditText editAddr = new EditText(mainActivity);
+                alert.setView(editAddr);
 
                 alert.setPositiveButton("변경", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Toast.makeText(mainActivity, "변경 되었습니다.", Toast.LENGTH_SHORT).show();
-                        String userCRN = CRN.getText().toString();
+                        String userAddr = editAddr.getText().toString();
+                        mDatabase.child("users").child(user.getUid()).child("userAddr").setValue(userAddr);
                     }
                 });
                 alert.setNegativeButton("취소", new DialogInterface.OnClickListener() {
@@ -148,7 +130,6 @@ public class FragmentMypage extends Fragment {
                 alert.show();
             }
         });
-
 
         changeToSeller.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -188,7 +169,6 @@ public class FragmentMypage extends Fragment {
                 alert.show();
             }
         });
-
         adminFurniture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

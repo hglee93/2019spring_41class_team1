@@ -108,23 +108,15 @@
                 android:layout_gravity="center"
                 android:gravity="center_horizontal"
                 android:layout_weight="2"
-                android:text="수원시 영통구 매탄1동"
                 android:textSize="20dp" />
         </LinearLayout>
     </LinearLayout>
 
     <Button
-        android:id="@+id/btnChangeName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/userInfo"
-        android:text="이름 변경" />
-
-    <Button
         android:id="@+id/btnChangeAddr"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/btnChangeName"
+        android:layout_below="@+id/userInfo"
         android:text="주소 변경" />
 
     <Button
