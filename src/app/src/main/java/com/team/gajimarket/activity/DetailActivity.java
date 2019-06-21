@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Registry;
@@ -61,11 +62,20 @@ public class DetailActivity extends AppCompatActivity {
         Glide.with(this).load(storageReference).into(imgItem);
 
         Button btnPickedItemVR = (Button)findViewById(R.id.btnPickedItemVR);
+        Button btnBuyPickedItem = (Button)findViewById(R.id.btnBuyPickedItem);
+
         btnPickedItemVR.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), ArActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        btnBuyPickedItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(v.getContext(), "구매가 완료되었습니다.", Toast.LENGTH_LONG).show();
             }
         });
     }
